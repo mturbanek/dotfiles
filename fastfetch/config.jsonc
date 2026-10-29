@@ -1,0 +1,230 @@
+// Modern sectioned fastfetch layout - requires a Nerd Font (you have MesloLGS Nerd Font)
+// Ideas from fastfetch presets/examples (13: Catnap-style, 7: tree icons) and the CachyOS/EndeavourOS fetch threads
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "type": "kitty",
+    "source": "~/.config/fastfetch/cachyos.png",
+    "width": 29,
+    "height": 11,
+    "padding": {
+      "top": 10,
+      "left": 3,
+      "right": 4
+    }
+  },
+  "display": {
+    "separator": " ",
+    "color": {
+      "keys": "36",
+      "title": "36",
+      "output": "default"
+    },
+    "size": {
+      "binaryPrefix": "iec",
+      "ndigits": 1
+    },
+    "temp": {
+      "unit": "C",
+      "ndigits": 0
+    },
+    "percent": {
+      "type": [
+        "num",
+        "bar"
+      ],
+      "color": {
+        "green": "32",
+        "yellow": "93",
+        "red": "91"
+      }
+    },
+    "bar": {
+      "char": {
+        "elapsed": "━",
+        "total": "━"
+      },
+      "border": null,
+      "width": 12,
+      "color": {
+        "total": "90"
+      }
+    }
+  },
+  "modules": [
+    {
+      "type": "title",
+      "key": "{#1;36}   ",
+      "format": "{#1;36}{user-name}{#0}{#90}@{#1;35}{host-name}"
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "{#36}╭─ 󰣇  System ─────────────────────────────────"
+    },
+    {
+      "type": "os",
+      "key": "{#36}│ ├{#1;36} 󰣇  OS       ",
+      "keyColor": "36",
+      "format": "{pretty-name} {arch}"
+    },
+    {
+      "type": "kernel",
+      "key": "{#36}│ ├{#1;36}   Kernel   ",
+      "keyColor": "36"
+    },
+    {
+      "type": "packages",
+      "key": "{#36}│ ├{#1;36} 󰏖  Packages ",
+      "keyColor": "36"
+    },
+    {
+      "type": "shell",
+      "key": "{#36}│ ├{#1;36} 󰈺  Shell    ",
+      "keyColor": "36"
+    },
+    {
+      "type": "terminal",
+      "key": "{#36}│ └{#1;36}   Terminal ",
+      "keyColor": "36"
+    },
+    {
+      "type": "custom",
+      "format": "{#36}╰─────────────────────────────────────────────"
+    },
+    {
+      "type": "custom",
+      "format": "{#35}╭─   Desktop ────────────────────────────────"
+    },
+    {
+      "type": "de",
+      "key": "{#35}│ ├{#1;35}   DE       ",
+      "keyColor": "35"
+    },
+    {
+      "type": "wm",
+      "key": "{#35}│ ├{#1;35} 󱂬  WM       ",
+      "keyColor": "35"
+    },
+    {
+      "type": "theme",
+      "format": "{theme1}",
+      "key": "{#35}│ ├{#1;35} 󰉼  Theme    ",
+      "keyColor": "35"
+    },
+    {
+      "type": "icons",
+      "key": "{#35}│ ├{#1;35} 󰀻  Icons    ",
+      "keyColor": "35"
+    },
+    {
+      "type": "font",
+      "key": "{#35}│ ├{#1;35}   Font     ",
+      "keyColor": "35",
+      "format": "{font1}"
+    },
+    {
+      "type": "display",
+      "key": "{#35}│ └{#1;35} 󰍹  Display  ",
+      "keyColor": "35",
+      "compactType": "original-with-refresh-rate"
+    },
+    {
+      "type": "custom",
+      "format": "{#35}╰─────────────────────────────────────────────"
+    },
+    {
+      "type": "custom",
+      "format": "{#34}╭─ 󰌢  Hardware ───────────────────────────────"
+    },
+    {
+      "type": "host",
+      "format": "{name}",
+      "key": "{#34}│ ├{#1;34} 󰌢  Host     ",
+      "keyColor": "34"
+    },
+    {
+      "type": "cpu",
+      "key": "{#34}│ ├{#1;34} 󰻠  CPU      ",
+      "keyColor": "34",
+      "temp": true,
+      "showPeCoreCount": true
+    },
+    {
+      "type": "gpu",
+      "key": "{#34}│ ├{#1;34} 󰢮  GPU      ",
+      "keyColor": "34",
+      "temp": true,
+      "hideType": "integrated",
+      "format": "{name}  {temperature}"
+    },
+    {
+      "type": "memory",
+      "key": "{#34}│ ├{#1;34} 󰍛  Memory   ",
+      "keyColor": "34"
+    },
+    {
+      "type": "swap",
+      "key": "{#34}│ ├{#1;34} 󰓡  Swap     ",
+      "keyColor": "34"
+    },
+    {
+      "type": "disk",
+      "key": "{#34}│ ├{#1;34} 󰋊  Disk     ",
+      "keyColor": "34",
+      "folders": "/",
+      "format": "{size-percentage-bar} {size-used} / {size-total} ({size-percentage}) · {filesystem}"
+    },
+    {
+      "type": "disk",
+      "key": "{#34}│ ├{#1;34} 󰋊  Data     ",
+      "keyColor": "34",
+      "folders": "/mnt/data",
+      "format": "{size-percentage-bar} {size-used} / {size-total} ({size-percentage}) · {filesystem}"
+    },
+    {
+      "type": "disk",
+      "key": "{#34}│ └{#1;34} 󰒋  NAS      ",
+      "keyColor": "34",
+      "folders": "/mnt/nas",
+      "showRemote": true,
+      "format": "{size-percentage-bar} {size-used} / {size-total} ({size-percentage}) · {filesystem}"
+    },
+    {
+      "type": "custom",
+      "format": "{#34}╰─────────────────────────────────────────────"
+    },
+    {
+      "type": "custom",
+      "format": "{#32}╭─ 󰅐  Status ─────────────────────────────────"
+    },
+    {
+      "type": "uptime",
+      "key": "{#32}│ ├{#1;32} 󰅐  Uptime   ",
+      "keyColor": "32"
+    },
+    {
+      "type": "localip",
+      "key": "{#32}│ ├{#1;32} 󰩟  Local IP ",
+      "keyColor": "32",
+      "compact": true
+    },
+    {
+      "type": "datetime",
+      "key": "{#32}│ └{#1;32} 󰃭  Date     ",
+      "keyColor": "32",
+      "format": "{weekday}, {day-in-month} {month-name} {year}  {hour-pretty}:{minute-pretty}"
+    },
+    {
+      "type": "custom",
+      "format": "{#32}╰─────────────────────────────────────────────"
+    },
+    "break",
+    {
+      "type": "colors",
+      "key": "  ",
+      "symbol": "circle",
+      "paddingLeft": 2
+    }
+  ]
+}
