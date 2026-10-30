@@ -1,0 +1,22 @@
+# Reapply the OpenRGB profile a few seconds after waking from sleep.
+# The X870E AORUS USB controllers reinit on resume and reset the RGB devices
+# right as OpenRGB's built-in resume_profile fires, so the profile gets lost.
+#
+# Install:
+#   sudo cp openrgb-resume.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable openrgb-resume.service
+
+[Unit]
+Description=Reapply OpenRGB profile after resume
+After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+
+[Service]
+Type=oneshot
+User=murbanek
+# Wait for the USB controllers to finish re-initialising after wake
+ExecStartPre=/bin/sleep 5
+ExecStart=/usr/bin/openrgb --noautoconnect -p Mike
+
+[Install]
+WantedBy=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
