@@ -11,7 +11,7 @@ After resuming from suspend, the RGB lighting lost its profile. OpenRGB's own "l
 On wake, the motherboard's USB controllers (AMD Promontory 21 chipset, X870E AORUS) reinitialize:
 
 ```
-xhci_hcd ...: xHC error in resume, USBSTS 0x401, Reinit
+xhci-pci-prom21 0000:13:00.0: xHC error in resume, USBSTS 0x401, Reinit
 ```
 
 That resets the USB RGB devices (a GIGABYTE RGB controller, `048d:5711`, and a Keychron keyboard) at the same moment OpenRGB applies its resume profile. The profile goes to devices that are about to disappear, so it's lost. The running OpenRGB GUI is left holding stale device handles.
