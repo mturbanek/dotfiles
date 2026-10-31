@@ -1,6 +1,12 @@
-# Reapply the OpenRGB profile a few seconds after waking from sleep.
+# /etc/systemd/system/openrgb-resume.service
+# Reapply the OpenRGB profile after waking from sleep.
 # The X870E AORUS USB controllers reinit on resume and reset the RGB devices
 # right as OpenRGB's built-in resume_profile fires, so the profile gets lost.
+#
+# Wait until the USB RGB devices (GIGABYTE 048d:5711, Keychron 3434:0c50) have
+# re-enumerated, then restart the OpenRGB GUI (KDE autostart unit): its startup
+# detection is a full rescan and it loads open_profile. Without the GUI, load
+# the profile with a one-off CLI instance.
 #
 # Install:
 #   sudo cp openrgb-resume.service /etc/systemd/system/
@@ -13,10 +19,26 @@ After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate
 
 [Service]
 Type=oneshot
-User=murbanek
-# Wait for the USB controllers to finish re-initialising after wake
-ExecStartPre=/bin/sleep 5
-ExecStart=/usr/bin/openrgb --noautoconnect -p Mike
+User=youruser
+# Lets `systemctl --user` reach this user's service manager (set to the user's UID)
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+TimeoutStartSec=90
+# Wait (up to 30s) for both RGB USB devices, then let them settle
+ExecStartPre=/bin/sh -c '\
+  for i in $(seq 60); do \
+    lsusb -d 048d:5711 >/dev/null && lsusb -d 3434:0c50 >/dev/null && break; \
+    sleep 0.5; \
+  done; \
+  echo "USB RGB devices present after $((i / 2))s"; \
+  sleep 3'
+ExecStart=/bin/sh -c '\
+  if systemctl --user -q is-active app-OpenRGB@autostart.service; then \
+    echo "Restarting OpenRGB GUI"; \
+    systemctl --user daemon-reload; \
+    exec systemctl --user restart app-OpenRGB@autostart.service; \
+  else \
+    exec /usr/bin/openrgb --noautoconnect -p White; \
+  fi'
 
 [Install]
 WantedBy=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
