@@ -135,17 +135,17 @@
     },
     {
       "type": "custom",
-      "format": "{#34}╭─ 󰌢  Hardware ───────────────────────────────"
+      "format": "{#34}╭─ 󰇅  Hardware ───────────────────────────────"
     },
     {
       "type": "host",
       "format": "{name}",
-      "key": "{#34}│ ├{#1;34} 󰌢  Host     ",
+      "key": "{#34}│ ├{#1;34} 󰇅  Host     ",
       "keyColor": "34"
     },
     {
       "type": "cpu",
-      "key": "{#34}│ ├{#1;34} 󰻠  CPU      ",
+      "key": "{#34}│ ├{#1;34}   CPU      ",
       "keyColor": "34",
       "temp": true,
       "showPeCoreCount": true
@@ -160,7 +160,7 @@
     },
     {
       "type": "memory",
-      "key": "{#34}│ ├{#1;34} 󰍛  Memory   ",
+      "key": "{#34}│ ├{#1;34}   Memory   ",
       "keyColor": "34"
     },
     {
@@ -184,9 +184,10 @@
     },
     {
       "type": "disk",
-      "key": "{#34}│ └{#1;34} 󰒋  NAS      ",
+      "key": "{#34}│ └{#1;34} 󰣳  NAS      ",
       "keyColor": "34",
       "folders": "/mnt/nas",
+      "hideFS": "autofs",
       "showRemote": true,
       "format": "{size-percentage-bar} {size-used} / {size-total} ({size-percentage}) · {filesystem}"
     },
