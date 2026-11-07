@@ -132,9 +132,21 @@
     },
     {
       "type": "display",
-      "key": "{#35}│ └{#1;35} 󰍹  Display  ",
+      "key": "{#35}│ ├{#1;35} 󰍹  Display  ",
       "keyColor": "35",
-      "compactType": "original-with-refresh-rate"
+      "format": "{name} · {width}x{height} @ {refresh-rate} Hz"
+    },
+    {
+      "type": "display",
+      "key": "{#35}│ ├{#1;35} 󰩨  Scaling  ",
+      "keyColor": "35",
+      "format": "{scale-factor}x → {scaled-width}x{scaled-height}"
+    },
+    {
+      "type": "command",
+      "key": "{#35}│ └{#1;35} 󰸌  Color    ",
+      "keyColor": "35",
+      "text": "~/.config/fastfetch/display-color.py"
     },
     {
       "type": "custom",
