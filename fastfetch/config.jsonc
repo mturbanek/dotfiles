@@ -69,6 +69,13 @@
       "format": "{pretty-name} {arch}"
     },
     {
+      "type": "disk",
+      "key": "{#36}│ ├{#1;36} 󱦟  OS Age   ",
+      "keyColor": "36",
+      "folders": "/",
+      "format": "{days} days (installed {create-time~0,10})"
+    },
+    {
       "type": "kernel",
       "key": "{#36}│ ├{#1;36}   Kernel   ",
       "keyColor": "36"

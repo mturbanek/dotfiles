@@ -16,5 +16,6 @@ Needs a Nerd Font (MesloLGS Nerd Font here) and a terminal with the kitty graphi
 
 ## Changelog
 
+- **v1.2** (2026-11-07): `OS Age` row under OS: days since install, from the root filesystem creation time (`disk` module on `/`, `{days}` and `{create-time~0,10}`). Resets if `/` is reformatted.
 - **v1.1** (2026-10-30): show the NAS once (`hideFS: autofs`). Clearer icons: microchip for CPU, RAM stick for Memory (both were near-identical chips), desktop tower for Host and the Hardware header (was a laptop), NAS box for NAS.
 - **v1.0** (2026-10-29): initial layout and logo.
