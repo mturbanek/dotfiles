@@ -1,0 +1,28 @@
+# power-rgb.service: lights follow the power state.
+# Start (early boot, as soon as the USB RGB devices exist): green breathing.
+#   The desktop's OpenRGB GUI turns everything solid white when it starts at
+#   login (open_profile = White), so green means "not ready yet".
+# Stop (shutdown/reboot): red / amber breathing. Ordered Before=
+#   systemd-user-sessions.service, so it is stopped *after* user sessions end,
+#   i.e. after the GUI's exit_profile (White) has been applied, not before.
+[Unit]
+Description=Power-state RGB lighting (OpenRGB)
+DefaultDependencies=no
+After=systemd-udev-trigger.service systemd-remount-fs.service
+Before=systemd-user-sessions.service shutdown.target
+Conflicts=shutdown.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+StateDirectory=power-rgb
+Environment=POWER_RGB_CONFIG=/var/lib/power-rgb
+TimeoutStartSec=30
+TimeoutStopSec=15
+# Wait (up to 15s) for the GIGABYTE RGB controller and the Keychron
+ExecStartPre=/bin/sh -c 'for i in $(seq 30); do lsusb -d 048d:5711 >/dev/null && lsusb -d 3434:0c50 >/dev/null && exit 0; sleep 0.5; done; echo "RGB USB devices not found; continuing"'
+ExecStart=/usr/local/bin/power-rgb boot
+ExecStop=/usr/local/bin/power-rgb shutdown
+
+[Install]
+WantedBy=sysinit.target

@@ -1,0 +1,16 @@
+# power-rgb-sleep.service: dim blue breathing just before suspend/hibernate.
+# Wake is handled by openrgb-resume.service (restarts the OpenRGB GUI → White).
+# OpenRGB's own suspend_profile must be disabled, or it races this with White.
+[Unit]
+Description=Power-state RGB lighting: sleeping (OpenRGB)
+Before=sleep.target
+
+[Service]
+Type=oneshot
+Environment=POWER_RGB_CONFIG=/var/lib/power-rgb
+StateDirectory=power-rgb
+TimeoutStartSec=10
+ExecStart=/usr/local/bin/power-rgb sleep
+
+[Install]
+WantedBy=sleep.target

@@ -1,0 +1,55 @@
+#!/bin/sh
+# power-rgb: set the desktop lights to match the power state.
+#   boot      green breathing (starting up, until the desktop's OpenRGB loads "White")
+#   on        solid white
+#   poweroff  red breathing
+#   reboot    amber breathing
+#   sleep     dim, slow blue breathing (board + keyboard keep it up while
+#             suspended if USB stays powered; the GPU goes dark anyway)
+#   shutdown  poweroff or reboot, whichever systemd is doing
+# Uses the OpenRGB CLI directly (hardware modes, so effects keep running with
+# no process alive). Config/logs go to $POWER_RGB_CONFIG.
+set -u
+CONFIG=${POWER_RGB_CONFIG:-/var/lib/power-rgb}
+BOARD="X870E AORUS PRO"
+KEYBOARD="Keychron V5 Ultra 8K"
+GPU="NVIDIA GeForce RTX 4080 FE"   # Direct only: solid color
+
+state=${1:-}
+if [ "$state" = shutdown ]; then
+    if systemctl list-jobs --no-legend 2>/dev/null | grep -q 'reboot\.target\|kexec\.target\|soft-reboot\.target'; then
+        state=reboot
+    else
+        state=poweroff
+    fi
+fi
+
+# OpenRGB exits 0 even on errors (bad mode, bad config dir); catch them.
+openrgb() {
+    out=$(command openrgb "$@" 2>&1); rc=$?
+    [ -n "$out" ] && printf '%s\n' "$out"
+    case "$out" in *Error*|*"not a valid"*|*Usage:*) exit 1 ;; esac
+    exit $rc
+}
+
+breathe() {  # color speed%
+    openrgb --noautoconnect --config "$CONFIG" --loglevel warning \
+        -d "$BOARD" -m breathing -c "$1" \
+        -d "$KEYBOARD" -m breathing -c "$1" -s "$2" \
+        -d "$GPU" -m direct -c "$1"
+}
+
+case "$state" in
+    boot)     breathe 00FF00 45 ;;
+    poweroff) breathe FF0000 70 ;;
+    reboot)   breathe FF8C00 70 ;;
+    sleep)    openrgb --noautoconnect --config "$CONFIG" --loglevel warning \
+                  -d "$BOARD" -m breathing -c 0030FF -b 30 -s 15 \
+                  -d "$KEYBOARD" -m breathing -c 001A80 -s 15 \
+                  -d "$GPU" -m direct -c 000C40 ;;
+    on)       openrgb --noautoconnect --config "$CONFIG" --loglevel warning \
+                  -d "$BOARD" -m static -c FFFFFF \
+                  -d "$KEYBOARD" -m "solid color" -c FFFFFF \
+                  -d "$GPU" -m direct -c FFFFFF ;;
+    *) echo "usage: power-rgb boot|on|sleep|poweroff|reboot|shutdown" >&2; exit 2 ;;
+esac
